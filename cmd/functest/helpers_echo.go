@@ -1,6 +1,10 @@
 package functest
 
 import (
+	"fmt"
+
+	"github.com/google/uuid"
+
 	pb "github.com/gomeet-examples/svc-echo/pb"
 )
 
@@ -8,7 +12,13 @@ func testGetEchoRequest() (reqs []*pb.EchoRequest) {
 	// return an array of pb.EchoRequest struct pointers,
 	// each of them will be passed as an argument to the grpc Echo method
 
-	reqs = append(reqs, &pb.EchoRequest{})
+	reqs = append(reqs, &pb.EchoRequest{Uuid: "", Content: "Hello message"})        // empty Uuid
+	reqs = append(reqs, &pb.EchoRequest{Uuid: "invalid", Content: "Hello message"}) // invalid Uuid
+	reqs = append(reqs, &pb.EchoRequest{Uuid: uuid.New().String(), Content: ""})    // empty Content
+	reqs = append(reqs, &pb.EchoRequest{Uuid: uuid.New().String(), Content: "E"})   // invalid Content
+
+	// valid index 4+
+	reqs = append(reqs, &pb.EchoRequest{Uuid: uuid.New().String(), Content: "Hello message"})
 	return reqs
 }
 
@@ -20,7 +30,7 @@ func testEchoResponse(
 	// testCaseResults[n].Request, testCaseResults[n].Response and testCaseResults[n].Error
 	// then return a array of TestFailure struct
 	// testsType value is value of FUNCTEST_HTTP (HTTP) and FUNCTEST_GRPC (GRPC) constants cf. types.go
-	for _, tr := range testCaseResults {
+	for i, tr := range testCaseResults {
 		var (
 			req *pb.EchoRequest
 			res *pb.EchoResponse
@@ -37,6 +47,15 @@ func testEchoResponse(
 			continue
 		}
 
+		err = tr.Error
+		if i < 4 {
+			if err == nil {
+				// if no error are expected do something like this
+				failures = append(failures, TestFailure{Procedure: "Echo", Message: "an error is expected"})
+			}
+			continue
+		}
+
 		if tr.Response != nil {
 			res, ok = tr.Response.(*pb.EchoResponse)
 			if !ok {
@@ -45,20 +64,21 @@ func testEchoResponse(
 			}
 		}
 
-		// Do something useful functional test with req, res and err
-		err = tr.Error
 		if err != nil {
 			// if no error are expected do something like this
-			// failures = append(failures, TestFailure{Procedure: "Echo", Message: "no error expected"})
-			// continue
+			failures = append(failures, TestFailure{Procedure: "Echo", Message: fmt.Sprintf("no error expected - %s %d", err, i)})
+			continue
 		}
 
 		if req != nil && res != nil {
-			// for example :
-			// if res.GetId() != req.GetId() {
-			//     failureMsg := fmt.Sprintf("expected ID \"%s\" but got \"%s\" for request: %v", req.GetId(), res.GetId(), req)
-			//     failures = append(failures, TestFailure{Procedure: "Echo", Message: failureMsg})
-			// }
+			if res.GetUuid() != req.GetUuid() {
+				failureMsg := fmt.Sprintf("expected Uuid \"%s\" but got \"%s\" for request: %v", req.GetUuid(), res.GetUuid(), req)
+				failures = append(failures, TestFailure{Procedure: "Echo", Message: failureMsg})
+			}
+			if res.GetContent() != req.GetContent() {
+				failureMsg := fmt.Sprintf("expected Content \"%s\" but got \"%s\" for request: %v", req.GetContent(), res.GetContent(), req)
+				failures = append(failures, TestFailure{Procedure: "Echo", Message: failureMsg})
+			}
 		}
 	}
 
