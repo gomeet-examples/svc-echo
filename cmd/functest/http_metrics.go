@@ -50,8 +50,8 @@ func TestHttpMetrics(config FunctionalTestConfig) []TestFailure {
 
 	routeMap := map[string]string{
 		"/api/v1/services/status": "Api.ServicesStatus",
-		"/api/v1/echo":            "Api.Echo",
 		"/api/v1/version":         "Api.Version",
+		"/api/v1/echo":            "Api.Echo",
 	}
 
 	for _, label := range routeMap {
