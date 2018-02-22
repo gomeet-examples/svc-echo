@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	"github.com/gomeet/gomeet/utils/jwt"
@@ -30,6 +31,9 @@ var (
 
 func init() {
 	RootCmd.AddCommand(funcTestCmd)
+
+	// force debug mode
+	funcTestCmd.PersistentFlags().BoolVarP(&debugMode, "debug", "d", false, "Force debug mode")
 
 	// address flag (to serve all protocols on a single port)
 	funcTestCmd.PersistentFlags().StringVarP(&serverAddress, "address", "a", "localhost:13000", "Multiplexed gRPC/HTTP server address")
@@ -83,6 +87,12 @@ func getFreePort() (int, error) {
 
 func runFunctionalTests() {
 	if useEmbeddedServer {
+		if debugMode {
+			log.SetLevel(log.DebugLevel)
+		} else {
+			// by default for embedded server only panic are logged
+			log.SetLevel(log.PanicLevel)
+		}
 		if useRandomPort {
 			freePort, err := getFreePort()
 			if err == nil {
@@ -129,7 +139,8 @@ func runFunctionalTests() {
 	failures := runFunctionalTestSession(testConfig)
 
 	if len(failures) == 0 {
-		fmt.Printf("OK\n")
+		fmt.Println("PASS")
+		fmt.Println("ok\tfunctest is ok")
 
 		os.Exit(0)
 	} else {

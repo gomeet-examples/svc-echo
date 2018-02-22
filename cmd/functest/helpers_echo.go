@@ -8,7 +8,9 @@ import (
 	pb "github.com/gomeet-examples/svc-echo/pb"
 )
 
-func testGetEchoRequest() (reqs []*pb.EchoRequest) {
+func testGetEchoRequest(
+	config FunctionalTestConfig,
+) (reqs []*pb.EchoRequest, extras map[string]interface{}, err error) {
 	// return an array of pb.EchoRequest struct pointers,
 	// each of them will be passed as an argument to the grpc Echo method
 
@@ -19,12 +21,14 @@ func testGetEchoRequest() (reqs []*pb.EchoRequest) {
 
 	// valid index 4+
 	reqs = append(reqs, &pb.EchoRequest{Uuid: uuid.New().String(), Content: "Hello message"})
-	return reqs
+	return reqs, extras, err
 }
 
 func testEchoResponse(
+	config FunctionalTestConfig,
 	testsType string,
 	testCaseResults []*TestCaseResult,
+	extras map[string]interface{},
 ) (failures []TestFailure) {
 	// Do something useful functional test with
 	// testCaseResults[n].Request, testCaseResults[n].Response and testCaseResults[n].Error

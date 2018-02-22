@@ -45,62 +45,62 @@ func init() {
 
 func GomeetFakerSetLocale(l string) {
 	switch l {
-	case "ja":
-		faker.Locale = locales.Ja
-	case "de":
-		faker.Locale = locales.De
-	case "fr":
-		faker.Locale = locales.Fr
-	case "de-ch":
-		faker.Locale = locales.De_CH
-	case "en-au":
-		faker.Locale = locales.En_AU
+	case "en-ind":
+		faker.Locale = locales.En_IND
+	case "nl":
+		faker.Locale = locales.Nl
 	case "vi":
 		faker.Locale = locales.Vi
+	case "en":
+		faker.Locale = locales.En
+	case "ko":
+		faker.Locale = locales.Ko
+	case "pl":
+		faker.Locale = locales.Pl
+	case "pt-br":
+		faker.Locale = locales.Pt_BR
+	case "sv":
+		faker.Locale = locales.Sv
+	case "de-ch":
+		faker.Locale = locales.De_CH
+	case "en-ca":
+		faker.Locale = locales.En_CA
+	case "es":
+		faker.Locale = locales.Es
+	case "de-at":
+		faker.Locale = locales.De_AT
+	case "de":
+		faker.Locale = locales.De
+	case "en-bork":
+		faker.Locale = locales.En_BORK
+	case "en-gb":
+		faker.Locale = locales.En_GB
+	case "en-us":
+		faker.Locale = locales.En_US
+	case "it":
+		faker.Locale = locales.It
+	case "ja":
+		faker.Locale = locales.Ja
+	case "zh-cn":
+		faker.Locale = locales.Zh_CN
+	case "en-au":
+		faker.Locale = locales.En_AU
 	case "en-au-ocker":
 		faker.Locale = locales.En_AU_OCKER
 	case "nb-no":
 		faker.Locale = locales.Nb_NO
-	case "zh-tw":
-		faker.Locale = locales.Zh_TW
-	case "en-gb":
-		faker.Locale = locales.En_GB
-	case "en-ind":
-		faker.Locale = locales.En_IND
-	case "ko":
-		faker.Locale = locales.Ko
 	case "sk":
 		faker.Locale = locales.Sk
-	case "sv":
-		faker.Locale = locales.Sv
-	case "zh-cn":
-		faker.Locale = locales.Zh_CN
-	case "en-bork":
-		faker.Locale = locales.En_BORK
-	case "en-us":
-		faker.Locale = locales.En_US
-	case "es":
-		faker.Locale = locales.Es
-	case "fa":
-		faker.Locale = locales.Fa
-	case "pl":
-		faker.Locale = locales.Pl
-	case "de-at":
-		faker.Locale = locales.De_AT
-	case "en-ca":
-		faker.Locale = locales.En_CA
-	case "it":
-		faker.Locale = locales.It
-	case "pt-br":
-		faker.Locale = locales.Pt_BR
-	case "ru":
-		faker.Locale = locales.Ru
+	case "zh-tw":
+		faker.Locale = locales.Zh_TW
 	case "en-nep":
 		faker.Locale = locales.En_NEP
-	case "en":
-		faker.Locale = locales.En
-	case "nl":
-		faker.Locale = locales.Nl
+	case "fa":
+		faker.Locale = locales.Fa
+	case "ru":
+		faker.Locale = locales.Ru
+	case "fr":
+		faker.Locale = locales.Fr
 	default:
 		faker.Locale = locales.En
 	}

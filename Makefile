@@ -351,7 +351,7 @@ tools-sync-protoc:
 
 .PHONY: tools-upgrade-gomeet
 tools-upgrade-gomeet: tools
-	@echo "dep-update-gomeet-utils $(ASKED_SVC)"
+	@echo "$(NAME): tools-upgrade-gomeet task"
 	_tools/bin/retool upgrade github.com/gomeet/gomeet-tools-markdown-server origin/master
 	_tools/bin/retool upgrade github.com/gomeet/go-proto-gomeetfaker/protoc-gen-gomeetfaker origin/master
 	_tools/bin/retool upgrade github.com/gomeet/gomeet/protoc-gen-gomeet-service origin/master
@@ -359,15 +359,17 @@ tools-upgrade-gomeet: tools
 
 .PHONY: tools-upgrade
 tools-upgrade: tools
+	@echo "$(NAME): tools-upgrade task"
 	GOPATH=$(shell pwd)/_tools/ && \
 		for tool in $(shell cat tools.json | grep "Repository" | awk '{print $$2}' | sed 's/,//g' | sed 's/"//g' ); do $$GOPATH/bin/retool upgrade $$tool origin/master ; done
 
 .PHONY: test
 test: build
-	cd service && go test
-	if [ -f $(GO_PROTO_PACKAGE_ALIAS)/*_test.go ]; then cd pb && go test; fi
-	_build/$(NAME) functest -e --random-port
-
+	@echo "$(NAME): test task"
+	@cd service && go test
+	@if [ -f $(GO_PROTO_PACKAGE_ALIAS)/*_test.go ]; then cd pb && go test; fi
+	@_build/$(NAME) functest -e --random-port
+	
 .PHONY: docker-test
 docker-test: docker
 	docker run -v $(shell pwd):/go/src/$(GO_PACKAGE_NAME) --rm golang:1.8.3-alpine3.6 /bin/sh -c "cd /go/src/$(GO_PACKAGE_NAME)/service && go test"
@@ -379,6 +381,7 @@ doc-server: tools
 
 .PHONY: gomeet-regenerate-project
 gomeet-regenerate-project: tools
+	@echo "$(NAME): gomeet-regenerate-project task"
 	_tools/bin/gomeet new ${GO_PACKAGE_NAME} \
 		--default-prefixes=${DEFAULT_PREFIXES} \
 		--proto-name=${GO_PROTO_PACKAGE_ALIAS} \
