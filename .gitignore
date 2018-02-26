@@ -53,5 +53,6 @@ data/certs
 _tools/protoc
 
 # local build (ndlr. make)
-_build/svc-echo
-
+# _build/svc-echo
+_build
+.env

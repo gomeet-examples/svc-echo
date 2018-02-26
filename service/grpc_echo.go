@@ -2,6 +2,8 @@ package service
 
 import (
 	"golang.org/x/net/context"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/gomeet/gomeet/utils/log"
 
@@ -11,10 +13,14 @@ import (
 func (s *echoServer) Echo(ctx context.Context, req *pb.EchoRequest) (*pb.EchoResponse, error) {
 	log.Debug(ctx, "service call", log.Fields{"req": req})
 
-	// res := &pb.EchoResponse{}
-	// Do something useful with req and res
-	// for now a fake response is returned see https://github.com/gomeet/go-proto-gomeetfaker
-	res := pb.NewEchoResponseGomeetFaker()
+	if err := req.Validate(); err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	res := &pb.EchoResponse{
+		Uuid:    req.GetUuid(),
+		Content: req.GetContent(),
+	}
 
 	return res, nil
 }

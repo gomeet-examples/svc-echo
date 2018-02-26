@@ -15,10 +15,16 @@ func TestEcho(config FunctionalTestConfig) (failures []TestFailure) {
 	defer client.Close()
 
 	var testCaseResults []*TestCaseResult
-	for _, req := range testGetEchoRequest() {
+	reqs, extras, err := testGetEchoRequest(config)
+	if err != nil {
+		failures = append(failures, TestFailure{Procedure: "Echo", Message: fmt.Sprintf("HTTP testGetEchoRequest error (%v)", err)})
+		return failures
+	}
+
+	for _, req := range reqs {
 		res, err := client.GetGRPCClient().Echo(ctx, req)
 		testCaseResults = append(testCaseResults, &TestCaseResult{req, res, err})
 	}
 
-	return testEchoResponse(FUNCTEST_GRPC, testCaseResults)
+	return testEchoResponse(config, FUNCTEST_GRPC, testCaseResults, extras)
 }
