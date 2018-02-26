@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+- Echo service implementation
 - Creation from [gomeet](https://github.com/gomeet/gomeet)
 
 ```shell
